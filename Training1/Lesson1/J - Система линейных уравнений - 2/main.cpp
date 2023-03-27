@@ -1,89 +1,105 @@
-#include <iostream>
 #include <algorithm>
-#include <tuple>
-#include <vector>
 #include <cmath>
- 
-using namespace std;
+#include <iomanip>
+#include <iostream>
+#include <limits>
 
-enum class SolutionType {
-    NO_SOLUTION = 0,
-    INFINITE_LINEAR = 1,
-    SINGLE_SOLUTION = 2,
-    INFINITE_ANY_Y = 3,
-    INFINITE_ANY_X = 4,
-    INFINITE_ANY_XY = 5
-};
- 
-double getSquareDeterminant(double a0, double a1, double b0, double b1) {
-    return (a0 * b1 - a1 * b0);
+int const NOSOLUTION = 0;
+int const EQUOTION = 1;
+int const ONE_SOLUTION = 2;
+int const ANY_Y = 3;
+int const ANY_X = 4;
+int const MANY_SOLUTIONS = 5;
+double const EPSILON = 1.e-7;
+int const PRESISION = 8;
+
+bool IsZero(double x)
+{
+    return std::fabs(x) < EPSILON;
 }
- 
-bool isZero(double number) {
-    static const double EPS = 1e-6;
-    return abs(number) < EPS;
-}
- 
-pair<SolutionType, vector<double>> solveLinearSquareSystem(double a, double b, double c, double d, double e, double f) {
-    vector<double> solution;
- 
-    double determinant = getSquareDeterminant(a, b, c, d);
-    double determinantX = getSquareDeterminant(e, b, f, d);
-    double determinantY = getSquareDeterminant(a, e, c, f);
- 
-    if (!isZero(determinant)) { //существует только одно решение системы
-        solution.emplace_back(determinantX / determinant);
-        solution.emplace_back(determinantY / determinant);
-        return make_pair(SolutionType::SINGLE_SOLUTION, solution);
- 
-    } else if ((isZero(determinantX) && isZero(determinantY))) {  //бесконечное количество решений (или 0 решений, если неправильные коэффициенты)
- 
-        if (isZero(a) && isZero(b) && isZero(e)) { // если одно из уравнений вида 0*х + 0y = 0, скопируем коэффициенты из второго, чтобы потом не делать лишние проверки
-            a = c;
-            b = d;
-            e = f;
+
+void OneSolution(double a, double b, double c);
+
+void ManySolution(double a, double b, double c);
+
+int main()
+{
+    double a1, b1, a2, b2, c1, c2;
+    std::cin >> a1 >> b1 >> a2 >> b2 >> c1 >> c2;
+    if (IsZero(a1) && IsZero(b1) && IsZero(a2) && IsZero(b2)) {
+        if (IsZero(c1) && IsZero(c2)) {
+            std::cout << MANY_SOLUTIONS << std::endl;
+        } else {
+            std::cout << NOSOLUTION << std::endl;
         }
- 
-        if (isZero(c) && isZero(d) && isZero(f)) { // если одно из уравнений вида 0*х + 0y = 0, скопируем коэффициенты из второго, чтобы потом не делать лишние проверки
-            c = a;
-            d = b;
-            f = e;
+        return 0;
+    }
+    if (IsZero(a1) && IsZero(b1)) {
+        if (!IsZero(c1)) {
+            std::cout << NOSOLUTION << std::endl;
+        } else {
+            ManySolution(a2, b2, c2);
         }
- 
-        if ((isZero(a) && isZero(b) && !isZero(e)) || (isZero(c) && isZero(d) && !isZero(f))) { // случай 0*х + 0*y != 0
-            return make_pair(SolutionType::NO_SOLUTION, solution);
- 
-        } else if (isZero(a) && isZero(b) && isZero(c) && isZero(d)) { // случай 0*х + 0*y = 0
-            return make_pair(SolutionType::INFINITE_ANY_XY, solution);
- 
-        } else if (isZero(a)) { // случай 0*x + b*y = e; 
-            solution.emplace_back(e / b);
-            return make_pair(SolutionType::INFINITE_ANY_X, solution);
- 
-        } else if (isZero(b)) { //случай a*x + 0*y = e;
-            solution.emplace_back(e / a);
-            return make_pair(SolutionType::INFINITE_ANY_Y, solution);
- 
-        } else { // линейное уравнение a*x + b*y = e;
-            solution.emplace_back(-a / b);
-            solution.emplace_back(e / b);
-            return make_pair(SolutionType::INFINITE_LINEAR, solution);
+        return 0;
+    }
+    if (IsZero(a2) && IsZero(b2)) {
+        if (!IsZero(c2)) {
+            std::cout << NOSOLUTION << std::endl;
+        } else {
+            ManySolution(a1, b1, c1);
         }
- 
-    } else { // по Крамеру не существует решений
-        return make_pair(SolutionType::NO_SOLUTION, solution);
+        return 0;
+    }
+
+    double const determ = a1 * b2 - a2 * b1;
+    if (!IsZero(determ)) {
+        double x_determ = b2 * c1 - b1 * c2;
+        double y_determ = a1 * c2 - a2 * c1;
+        OneSolution(x_determ, y_determ, determ);
+    } else {
+        if (!IsZero(a1 * c2 - a2 * c1) || !IsZero(b1 * c2 - b2 * c1)) {
+            std::cout << NOSOLUTION << std::endl;
+        } else {
+            ManySolution(a1, b1, c1);
+        }
     }
 }
- 
-int main() {
-    double a, b, c, d, e, f;
-    cin >> a >> b >> c >> d >> e >> f;
-    auto [solutionType, solution] = solveLinearSquareSystem(a, b, c, d, e, f);
-    cout << static_cast<int>(solutionType);
-    for (auto i : solution) {
-        cout << ' ' << i;
+
+void OneSolution(double a, double b, double c)
+{
+    std::cout << ONE_SOLUTION << ' ';
+    std::cout << std::fixed
+              << std::setprecision(PRESISION)
+              << a / c << ' '
+              << b / c << std::endl;
+}
+
+void ManySolution(double a, double b, double c)
+{
+    if (IsZero(a) && IsZero(b) && !IsZero(c)) {
+        std::cout << NOSOLUTION << std::endl;
+        return;
     }
- 
- 
-    return 0;
+    if (IsZero(a) && IsZero(b) && IsZero(c)) {
+        std::cout << MANY_SOLUTIONS << std::endl;
+        return;
+    }
+    if (IsZero(a)) {
+        std::cout << ANY_X << ' ';
+        std::cout << std::fixed
+                  << std::setprecision(PRESISION)
+                  << c / b;
+        return;
+    }
+    if (IsZero(b)) {
+        std::cout << ANY_Y << ' ';
+        std::cout << std::fixed
+                  << std::setprecision(PRESISION)
+                  << c / a;
+        return;
+    }
+    std::cout << EQUOTION << ' ';
+    std::cout << std::fixed
+              << std::setprecision(PRESISION)
+              << -a / b << ' ' << c / b;
 }

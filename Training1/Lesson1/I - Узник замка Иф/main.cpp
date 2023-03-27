@@ -1,18 +1,20 @@
+#include <algorithm>
 #include <iostream>
 #include <string>
-#include <algorithm>
 
 using namespace std;
 
-bool checkPlanar(int holeWidth, int holeLength, int brickWidth, int brickLength) {
-    if (((brickLength <= holeLength) && (brickWidth <= holeWidth)) ||
-        (brickLength <= holeWidth) && (brickWidth <= holeLength)) {
+bool checkPlanar(int holeWidth, int holeLength, int brickWidth, int brickLength)
+{
+    if (((brickLength <= holeLength) && (brickWidth <= holeWidth))
+        || (brickLength <= holeWidth) && (brickWidth <= holeLength)) {
         return true;
     }
     return false;
 }
 
-int main() {
+int main()
+{
 
     int A, B, C, D, E;
     cin >> A >> B >> C >> D >> E;

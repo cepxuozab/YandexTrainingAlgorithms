@@ -1,11 +1,13 @@
-#include <iostream>
 #include <algorithm>
+#include <iostream>
 
-using namespace std;
-
-int main() {
-    int a, b, n, m;
-    cin >> a >> b >> n >> m;
+auto main() -> int
+{
+    int a;
+    int b;
+    int n;
+    int m;
+    std::cin >> a >> b >> n >> m;
 
     int firstMin = n + (n - 1) * a;
     int firstMax = firstMin + 2 * a;
@@ -13,11 +15,11 @@ int main() {
     int secondMax = secondMin + 2 * b;
 
     if ((firstMin > secondMax) || (secondMin > firstMax)) {
-        cout << -1 << '\n';
+        std::cout << -1 << std::endl;
     } else {
-        int tMin = max(firstMin, secondMin);
-        int tMax = min(firstMax, secondMax);  
-        cout << tMin << ' ' << tMax << '\n';
+        int tMin = std::max(firstMin, secondMin);
+        int tMax = std::min(firstMax, secondMax);
+        std::cout << tMin << ' ' << tMax << std::endl;
     }
 
     return 0;
