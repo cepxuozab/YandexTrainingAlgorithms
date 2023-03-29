@@ -2,7 +2,7 @@
 #include <iostream>
 #include <numeric>
 #include <vector>
-
+#include <iterator>
 int main()
 {
     std::vector<int> arr(std::istream_iterator<int>(std::cin), {});
