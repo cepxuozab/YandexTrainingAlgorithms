@@ -1,3 +1,3 @@
-[Contest 6]
+[Contest 8]
 
-[Contest 6]: <https://contest.yandex.ru/contest/27844/problems/>
+[Contest 8]: <https://contest.yandex.ru/contest/28069/problems/>
