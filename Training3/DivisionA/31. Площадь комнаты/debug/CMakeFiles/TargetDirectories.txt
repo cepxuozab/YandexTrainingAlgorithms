@@ -1,0 +1,3 @@
+C:/Users/Dell/Desktop/C++/YandexC++/TreningAlgo3/DivisionA/31. Площадь комнаты/debug/CMakeFiles/31RoomArea.dir
+C:/Users/Dell/Desktop/C++/YandexC++/TreningAlgo3/DivisionA/31. Площадь комнаты/debug/CMakeFiles/edit_cache.dir
+C:/Users/Dell/Desktop/C++/YandexC++/TreningAlgo3/DivisionA/31. Площадь комнаты/debug/CMakeFiles/rebuild_cache.dir
