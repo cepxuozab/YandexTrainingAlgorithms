@@ -1,8 +1,8 @@
 #include <algorithm>
 #include <iostream>
 #include <map>
-#include <vector>
 #include <string>
+#include <vector>
 
 auto const FASTIO = []() {
     std::ios_base::sync_with_stdio(false);
@@ -10,8 +10,8 @@ auto const FASTIO = []() {
     return nullptr;
 }();
 
-int main() {
-    freopen("input.txt", "r", stdin);
+int main()
+{
     int n;
     std::cin >> n;
     puts("Initial array:");
@@ -25,8 +25,7 @@ int main() {
         std::cin >> s;
         if (i == n - 1) {
             puts(s.c_str());
-        }
-        else {
+        } else {
             printf("%s, ", s.c_str());
         }
         mx = s.length();
@@ -39,27 +38,25 @@ int main() {
             nd[ch] = {};
         }
         printf("Phase %lld\n", i + 1);
-        for (auto const&[ j,str] : dict) {
+        for (auto const& [_, str] : dict) {
             for (auto h : str) {
                 nd[h[mx - i - 1]].push_back(h);
             }
         }
         dict.swap(nd);
-        for (char j = '0'; j <= '9';++j) {
+        for (char j = '0'; j <= '9'; ++j) {
             printf("Bucket %c: ", j);
             auto const& bucket = dict[j];
             if (bucket.empty()) {
                 puts("empty");
-            }
-            else {
+            } else {
                 for (size_t u = 0; u < bucket.size(); ++u) {
                     if (u + 1 == bucket.size()) {
-                        printf("%s\n", bucket[u].c_str());
-                    }
-                    else {
+                        puts(bucket[u].c_str());
+                    } else {
                         printf("%s, ", bucket[u].c_str());
                     }
-               }
+                }
             }
         }
         puts("**********");
@@ -71,8 +68,5 @@ int main() {
             res.append(str + ", ");
         }
     }
-    res.pop_back();
-    res.pop_back();
-    puts(res.c_str());
-
+    puts(res.substr(0, res.size() - 2).c_str());
 }
