@@ -1,90 +1,49 @@
-#include <cstdint>
+#include <algorithm>
 #include <iostream>
 #include <vector>
+
+auto const FASTIO = []() {
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+    return nullptr;
+}();
+
 
 int main()
 {
     freopen("input.txt", "r", stdin);
-    int capacity;
-    int maxFlour;
-    std::cin >> capacity >> maxFlour;
-    int64_t time = 0;
-    std::vector<int64_t> people(maxFlour + 1);
-    for (int i = 1; i < maxFlour + 1; ++i) {
-        int peoples;
-        std::cin >> peoples;
-        int trips = peoples / capacity;
-        time += (int64_t)trips * 2 * i;
-        people[i] = peoples % capacity;
+    int64_t k, n;
+    std::cin >> k >> n;
+    std::vector<int> floor_people { 0 };
+    for (int64_t i = 0; i < n; ++i) {
+        int p;
+        std::cin >> p;
+        floor_people.push_back(p);
     }
-    int flour = maxFlour;
-    int64_t loaded = 0;
-    while (flour > 0) {
-        if (people[flour] == 0) {
-            flour--;
+    unsigned long long min_time = 0;
+    int parking = 0;
+    int curr_elevator_floor = parking;
+    for (int64_t floor = n; floor > parking; --floor) {
+        if (floor_people[floor] == 0) {
             continue;
         }
-        if (loaded == 0) {
-            time += 2LL * flour;
+        min_time += std::abs(floor - curr_elevator_floor);
+        curr_elevator_floor = floor;
+        int rest = floor_people[floor] % k;
+        int full_load_count = floor_people[floor] / k;
+        if (full_load_count != 0) {
+            min_time += (full_load_count * 2 - 1) * (floor - parking);
+            floor_people[floor] -= (int64_t)full_load_count * k;
+            floor_people[parking] += (int64_t)full_load_count * k;
+            curr_elevator_floor = parking;
         }
-        loaded += people[flour];
-        if (loaded > capacity) {
-            people[flour] = loaded % capacity;
-            loaded = 0;
-        } else {
-            people[flour--] = 0;
-        }
-    }
-    std::cout << time;
-}
-/*
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.math.BigInteger;
-
-public class Task00f {
-
-    public static void main(String[] args) throws IOException {
-        var input = "input.txt";
-        File file = new File(input);
-        FileReader fileReader = new FileReader(file);
-        try (BufferedReader reader = new BufferedReader(fileReader)) {
-            String line = reader.readLine();
-            int capacity = Integer.parseInt(line);
-            line = reader.readLine();
-            int maxFlour = Integer.parseInt(line);
-            BigInteger time = BigInteger.ZERO;
-            int[] people = new int[maxFlour + 1];
-            for (int i = 1; i < maxFlour + 1; i++) {
-                line = reader.readLine();
-                int peoples = Integer.parseInt(line);
-                int trips = peoples / capacity;
-                time = time.add(BigInteger.valueOf((long) trips * i * 2));
-                people[i] = peoples - trips * capacity;
-            }
-            int flour = maxFlour;
-            int loaded = 0;
-            while (flour > 0) {
-                if (people[flour] == 0) {
-                    flour--;
-                    continue;
-                }
-                if (loaded == 0) {
-                    time = time.add(BigInteger.valueOf(flour * 2L));
-                }
-                loaded += people[flour];
-                if (loaded > capacity) {
-                    people[flour] = loaded % capacity;
-                    loaded = 0;
-                } else {
-                    people[flour--] = 0;
-                }
-            }
-            System.out.println(time);
+        if (rest != 0) {
+            min_time += std::abs(floor - curr_elevator_floor);
+            floor_people[floor - 1] += rest;
+            floor_people[floor] = 0;
+            min_time += 1;
+            curr_elevator_floor = floor - 1;
         }
     }
-
+    std::cout << min_time << std::endl;
 }
-*/
