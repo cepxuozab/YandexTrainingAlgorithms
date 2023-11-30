@@ -19,12 +19,14 @@ int main()
     int n, m;
     std::cin >> n >> m;
     auto graph = ReadGraph(n, m);
+    int const NUMBER_ALL_CUPS = 10'000'000;
+    int const CAR_WEIGHT = 3000 * 1000;
+    int const ONE_CUP_WEIGHT = 100;
     int l = 0;
-    int r = 10'000'000 + 1;
-    int car_weight = 3000 * 1000;
+    int r = NUMBER_ALL_CUPS + 1;
     while (r - l > 1) {
         int m = (l + r) / 2;
-        CheckCups(1, n, graph, car_weight + m * 100) ? l = m : r = m;
+        CheckCups(1, n, graph, CAR_WEIGHT + m * ONE_CUP_WEIGHT) ? l = m : r = m;
     }
     std::cout << l << std::endl;
 }
@@ -64,5 +66,6 @@ bool CheckCups(int start, int finish, Graph const& graph, int total_weight)
             }
         }
     }
-    return time[finish] > 24 * 60 ? false : true;
+    int const MINUTES_IN_DAY = 24 * 60;
+    return !(time[finish] > MINUTES_IN_DAY);
 }
