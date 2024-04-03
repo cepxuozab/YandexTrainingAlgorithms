@@ -1,0 +1,14 @@
+120 10 8
+start (image layout=embedded width=12 height=5)
+(image layout=surrounded width=25 height=58)
+and word is 
+(image layout=floating dx=18 dy=-15 width=25 height=20)
+here new 
+(image layout=embedded width=20 height=22)
+another
+(image layout=embedded width=40 height=19)
+longword
+
+new paragraph
+(image layout=surrounded width=5 height=30)
+(image layout=floating width=20 height=35 dx=50 dy=-16)

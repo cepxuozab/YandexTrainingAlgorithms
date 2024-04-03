@@ -1,0 +1,1 @@
+print((lambda n:(lambda ships:(lambda distance:(lambda minsum:min(minsum(j) for j in range(1, n + 1)))(lambda j:sum(distance(i, j, *k.pop()) for k in [ships[:]] for i in range(1, n + 1))))(lambda x1, y1, x2, y2:abs(x1 - x2) + abs(y1 - y2)))(sorted([tuple(map(int, input().split())) for _ in range(n)], reverse=True)))(int(input())))
