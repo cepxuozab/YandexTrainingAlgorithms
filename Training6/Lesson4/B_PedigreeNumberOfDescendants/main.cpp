@@ -1,59 +1,35 @@
-#include <algorithm>
 #include <iostream>
-#include <queue>
+#include <map>
 #include <string>
-#include <unordered_map>
 #include <vector>
 
 auto main() -> int {  // NOLINT
-    std::unordered_map<std::string, std::string> childToParent;
-    std::unordered_map<std::string, std::vector<std::string>> parentToChildren;
-
-    int N;
-    std::cin >> N;
-    for (int i = 0; i < N - 1; ++i) {
-        std::string parent;
-        std::string child;
+    int n;
+    std::cin >> n;
+    std::map<std::string, std::vector<std::string>> children;
+    std::map<std::string, int> cnt;
+    for (int i = 0; i + 1 < n; ++i) {
+        std::string child, parent;
         std::cin >> child >> parent;
-        childToParent[child] = parent;
-        parentToChildren[parent].push_back(child);
+        children[parent].push_back(child);
+        cnt[child] = -1;
+        cnt[parent] = -1;
     }
-
-    std::vector<std::string> BFS = [&] {
-        std::string forefather;
-        for (const auto& [parent, children] : parentToChildren) {
-            if (!childToParent.contains(parent)) {
-                forefather = parent;
+    auto get_cnt = [&](auto&& self, std::string const& name) -> int {
+        if (cnt[name] == -1) {
+            cnt[name] = 0;
+            if (children.contains(name)) {
+                for (auto const& child : children[name]) {
+                    cnt[name] += self(self, child) + 1;
+                }
             }
         }
-        std::vector<std::string> breadthFirstSearch;
-        std::queue<std::string> deq;
-        deq.push(forefather);
-
-        while (!deq.empty()) {
-            breadthFirstSearch.push_back(deq.front());
-            for (const auto& children : parentToChildren[deq.front()]) {
-                deq.push(children);
-            }
-            deq.pop();
-        }
-
-        return breadthFirstSearch;
-    }();
-
-    std::unordered_map<std::string, size_t> childrenQuantity;
-
-    for (auto it = BFS.rbegin(); it != BFS.rend(); ++it) {
-        for (const auto& child : parentToChildren[*it]) {
-            childrenQuantity[*it] += childrenQuantity[child] + 1;
-        }
+        return cnt[name];
+    };
+    for (auto const& [name, _] : cnt) {
+        get_cnt(get_cnt, name);
     }
-
-    std::ranges::sort(BFS);
-
-    for (const auto& name : BFS) {
-        std::cout << name << ' ' << childrenQuantity[name] << '\n';
+    for (auto const& [name, num] : cnt) {
+        std::cout << name << ' ' << num << '\n';
     }
-
-    return 0;
 }
