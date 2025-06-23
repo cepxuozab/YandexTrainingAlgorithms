@@ -1,0 +1,8 @@
+{
+    "cmake.debugConfig": {
+        "args": ["<", "../input.txt"]
+    },
+    "files.associations": {
+        "iostream": "cpp"
+    }
+}
