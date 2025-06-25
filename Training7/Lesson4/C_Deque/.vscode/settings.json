@@ -1,0 +1,7 @@
+{
+  "terminal.integrated.defaultProfile.windows": "MSYS2",
+  "cmake.generator": "Ninja",
+  "cmake.debugConfig": {
+    "args": ["<", "../tests/test_statement/input.txt"]
+  }
+}
