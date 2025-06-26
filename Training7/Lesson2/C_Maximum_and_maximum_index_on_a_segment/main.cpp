@@ -75,7 +75,7 @@ int main() {
         int l, r;
         cin >> l >> r;
         Node result = st.query(l, r);
-        cout << result.index << '\n';
+        cout << result.value << ' ' << result.index << '\n';
     }
 
     return 0;
