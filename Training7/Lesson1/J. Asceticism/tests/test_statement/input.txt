@@ -1,0 +1,6 @@
+5 3
+Cappuccino 25
+Car 5
+Food 4
+Apartment 1
+Shopping 7
