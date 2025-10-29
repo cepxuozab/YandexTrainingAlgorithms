@@ -1,0 +1,1 @@
+# [Тема 5, 6: Деревья. Бинарный поиск](https://contest.yandex.ru/contest/80941/problems/)
