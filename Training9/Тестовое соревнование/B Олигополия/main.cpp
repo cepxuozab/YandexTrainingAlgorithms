@@ -14,7 +14,7 @@ int main()
     }
 
     auto canWin = [&](int idx) -> bool {
-        int cur = a[idx];
+        long long cur = a[idx];
         for (int j = 0; j < N; ++j) {
             if (j == idx)
                 continue;
