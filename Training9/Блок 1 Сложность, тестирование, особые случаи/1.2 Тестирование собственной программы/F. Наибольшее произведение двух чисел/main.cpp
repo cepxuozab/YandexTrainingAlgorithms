@@ -1,41 +1,25 @@
 #include <algorithm>
-#include <climits>
 #include <iostream>
+#include <iterator>
+#include <limits>
 #include <utility>
+#include <vector>
 
-auto main() -> int
+auto main() -> int // NOLINT
 {
-    int x;
-    std::cin >> x;
-    int max1 = x, max2 = INT_MIN;
-    int min1 = x, min2 = INT_MAX;
-
-    for (; scanf("%d", &x) != EOF;)
-    {
-        if (x > max1)
-        {
-            max2 = std::exchange(max1, x);
-        }
-        else if (x > max2)
-        {
-            max2 = x;
-        }
-        if (x < min1)
-        {
-            min2 = std::exchange(min1, x);
-        }
-        else if (x < min2)
-        {
-            min2 = x;
-        }
+    std::vector<int> arr(std::istream_iterator<int>(std::cin), {});
+    int64_t first_min = std::numeric_limits<int>::max();
+    int64_t first_max = std::numeric_limits<int>::min();
+    auto second_min = first_min, second_max = first_max;
+    for (int i : arr) {
+        second_max = i > first_max ? std::exchange(first_max, i)
+                                   : std::max<int64_t>(second_max, i);
+        second_min = i < first_min ? std::exchange(first_min, i)
+                                   : std::min<int64_t>(second_min, i);
     }
-
-    if ((long long)max1 * max2 > (long long)min1 * min2)
-    {
-        printf("%d %d", std::min(max1, max2), std::max(max1, max2));
-    }
-    else
-    {
-        printf("%d %d", std::min(min1, min2), std::max(min1, min2));
+    if (first_max * second_max > first_min * second_min) {
+        std::cout << second_max << ' ' << first_max;
+    } else {
+        std::cout << first_min << ' ' << second_min;
     }
 }
