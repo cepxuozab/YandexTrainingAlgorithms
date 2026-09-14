@@ -1,1 +1,25 @@
-print((lambda n:(lambda ships:(lambda distance:(lambda minsum:min(minsum(j) for j in range(1, n + 1)))(lambda j:sum(distance(i, j, *k.pop()) for k in [ships[:]] for i in range(1, n + 1))))(lambda x1, y1, x2, y2:abs(x1 - x2) + abs(y1 - y2)))(sorted([tuple(map(int, input().split())) for _ in range(n)], reverse=True)))(int(input())))
+def min_moves(n: int, ships: list)->int:
+    x = sorted(ship[0] for ship in ships)
+    y = sorted(ship[1] for ship in ships)
+
+    median_y = y[n // 2]
+
+    moves_x = sum(abs(x[i] - (i + 1)) for i in range(n))
+    moves_y = sum(abs(u - median_y) for u in y)
+
+    return moves_x + moves_y
+
+
+def main()->None:
+    n = int(input())
+
+    ships = []
+    for _ in range(n):
+        x, y = map(int, input().split())
+        ships.append((x, y))
+
+    print(min_moves(n, ships))
+
+
+if __name__ == "__main__":
+    main()
